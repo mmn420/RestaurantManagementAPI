@@ -28,10 +28,7 @@ namespace api.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetUserById([FromRoute]int id)
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+           
             var user = await _userRepo.GetUserByIdAsync(id);
             if(user == null)
             {
@@ -42,10 +39,7 @@ namespace api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserDto userDto)
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+           
             User newUser = new User{
                 Name = userDto.Name,
                 Email = userDto.Email,
@@ -71,10 +65,7 @@ namespace api.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteUser([FromRoute] int id)
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+           
             var user = await _userRepo.DeleteUserAsync(id);
             if(user == null)
             {

@@ -10,10 +10,10 @@ namespace api.Interfaces
 {
     public interface IOrderItemsRepository
     {
-        Task<OrderMenuItem?> GetOrderItemByIdAsync(int orderId, int itemId);
-        Task<OrderMenuItem?> DeleteOrderItemAsync(int orderId, int itemId);
-        Task<OrderMenuItem?> UpdateOrderItemAsync(OrderItemsDto orderItemDto);
-        Task<OrderMenuItem?> AddItemToOrder(OrderItemsDto orderItemDto);
-        Task<List<OrderMenuItem>> GetAllAsync();
+        Task<OrderItemsDto?> GetOrderItemByIdAsync(int orderId, int itemId);
+        Task<OrderItemsDto?> DeleteOrderItemAsync(int orderId, int itemId);
+        Task<OrderItemsDto?> UpdateOrderItemAsync(OrderItemsDto orderItemDto);
+        Task<OrderItemsDto?> AddItemToOrder(OrderItemsDto orderItemDto);
+        Task<List<OrderItemsDto>> GetAllAsync();
     }
 }

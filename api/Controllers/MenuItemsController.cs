@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/menuitems")]
     [ApiController]
     public class MenuItemsController : ControllerBase
     {
@@ -27,10 +27,6 @@ namespace api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMenuItemById([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             var menuItem = await _menuItemRepo.GetMenuItemByIdAsync(id);
             if (menuItem == null)
             {
@@ -41,10 +37,6 @@ namespace api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMenuItem([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             var menuItem = await _menuItemRepo.DeleteMenuItemAsync(id);
             if (menuItem == null)
             {
@@ -55,20 +47,12 @@ namespace api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateMenuItem([FromBody] CreateMenuItemDto menuItemDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             var menuItem = await _menuItemRepo.AddMenuItemAsync(menuItemDto);
             return Ok(menuItem);
         }
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateMenuItem([FromRoute] int id, [FromBody] CreateMenuItemDto menuItemDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             var menuItem = await _menuItemRepo.UpdateMenuItemAsync(id, menuItemDto);
             if (menuItem == null)
             {

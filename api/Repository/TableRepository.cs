@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.Data;
 using api.DTOs.Table;
 using api.Interfaces;
+using api.Mappers;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,15 +20,15 @@ namespace api.Repository
             _context = context;
         }
 
-        public async Task<Table?> CreateTableAsync(Table table)
+        public async Task<TableDto?> CreateTableAsync(Table table)
         {
 
             await _context.Tables.AddAsync(table);
             await _context.SaveChangesAsync();
-            return table;
+            return table.ToTableDto();
         }
 
-        public async Task<Table?> DeleteTableAsync(int id)
+        public async Task<TableDto?> DeleteTableAsync(int id)
         {
             var table = await _context.Tables.FirstOrDefaultAsync(x => x.Id == id);
             if(table == null)
@@ -38,16 +39,17 @@ namespace api.Repository
             {
                 _context.Tables.Remove(table);
                 await _context.SaveChangesAsync();
-                return table;
+                return table.ToTableDto();
             }
         }
 
-        public async Task<List<Table>> GetAllTablesAsync()
+        public async Task<List<TableDto>> GetAllTablesAsync()
         {
-            return await _context.Tables.ToListAsync();
+            var tables = await _context.Tables.ToListAsync();
+            return tables.Select(x => x.ToTableDto()).ToList();
         }
 
-        public async Task<Table?> GetTableByIdAsync(int id)
+        public async Task<TableDto?> GetTableByIdAsync(int id)
         {
             var table = await _context.Tables.FirstOrDefaultAsync(x => x.Id == id);
             if(table == null)
@@ -56,11 +58,11 @@ namespace api.Repository
             }
             else
             {
-                return table;
+                return table.ToTableDto();
             }
         }
 
-        public async Task<Table?> UpdateTableAsync(int id, CreateTableDto table)
+        public async Task<TableDto?> UpdateTableAsync(int id, CreateTableDto table)
         {
             var existingTable = await _context.Tables.FirstOrDefaultAsync(x => x.Id == id);
             if(existingTable == null)
@@ -71,7 +73,7 @@ namespace api.Repository
             {
                 existingTable.Capacity = table.Capacity;
                 await _context.SaveChangesAsync();
-                return existingTable;
+                return existingTable.ToTableDto();
             }
         }
     }

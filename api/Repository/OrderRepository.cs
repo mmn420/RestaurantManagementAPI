@@ -6,6 +6,7 @@ using api.Data;
 using api.DTOs.Order;
 using api.DTOs.OrderItem;
 using api.Interfaces;
+using api.Mappers;
 using api.Models;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,7 @@ namespace api.Repository
             _context = context;
         }
 
-        public async Task<Order> CreateOrder(CreateOrderDto orderDto)
+        public async Task<OrderDto> CreateOrder(CreateOrderDto orderDto)
         {
             var orderItemModelList = new List<OrderMenuItem>();
             foreach(var item in orderDto.orderItemsList)
@@ -42,10 +43,10 @@ namespace api.Repository
 
             await _context.Orders.AddAsync(order);
             await _context.SaveChangesAsync();
-            return order;
+            return order.ToOrderDto();
         }
 
-        public async Task<Order?> DeleteOrder(int id)
+        public async Task<OrderDto?> DeleteOrder(int id)
         {
             var existingOrder = await _context.Orders.FirstOrDefaultAsync(x => x.Id == id);
             if (existingOrder == null)
@@ -55,10 +56,10 @@ namespace api.Repository
 
             _context.Orders.Remove(existingOrder);
             await _context.SaveChangesAsync();
-            return existingOrder;
+            return existingOrder.ToOrderDto();
         }
 
-        public async Task<Order?> GetOrderById(int id)
+        public async Task<OrderDto?> GetOrderById(int id)
         {
             var order = await _context.Orders
             .Include(x => x.OrderMenuItems)
@@ -68,17 +69,19 @@ namespace api.Repository
             {
                 return null;
             }
-            return order;
+            return order.ToOrderDto();
         }
 
-        public async Task<List<Order>> GetOrders()
+        public async Task<List<OrderDto>> GetOrders()
         {
-            return await _context.Orders
+            var orders = await _context.Orders
             .Include(x => x.OrderMenuItems)
             .ToListAsync();
+
+            return orders.Select(x => x.ToOrderDto()).ToList();
         }
 
-        public async Task<Order?> UpdateOrder(int id, UpdateOrderDto updateOrderDto)
+        public async Task<OrderDto?> UpdateOrder(int id, UpdateOrderDto updateOrderDto)
         {
             var existingOrder = await _context.Orders.FirstOrDefaultAsync(x => x.Id == id);
             if (existingOrder == null)
@@ -87,7 +90,7 @@ namespace api.Repository
             }
             existingOrder.OrderStatus = updateOrderDto.OrderStatus;
             await _context.SaveChangesAsync();
-            return existingOrder;
+            return existingOrder.ToOrderDto();
         }
     }
 }

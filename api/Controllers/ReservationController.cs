@@ -43,10 +43,6 @@ namespace api.Controllers
         public async Task<IActionResult> CreateReservation([FromBody] CreateReservationDto reservationModel)
         {
             var dateFromString = Utilities.ParseDateInput(reservationModel.Date);
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             Reservation newReservation = new Reservation
             {
                 Date = dateFromString,
@@ -66,10 +62,6 @@ namespace api.Controllers
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateReservation(int id, [FromBody] CreateReservationDto reservationDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             var reservation = await _reservationRepo.UpdateReservationAsync(id, reservationDto);
             if (reservation == null)
             {

@@ -9,11 +9,11 @@ namespace api.Interfaces
 {
     public interface IUserRepository
     {
-        Task<List<User>> GetAllUsersAsync();
-        Task<User?> GetUserByIdAsync(int id);
-        Task<User> CreateUserAsync(User user);
-        Task<User?> UpdateUserAsync(int id, UpdateUserDto userDto);
-        Task<User?> DeleteUserAsync(int id);
+        Task<List<UserDto>> GetAllUsersAsync();
+        Task<UserDto?> GetUserByIdAsync(int id);
+        Task<UserDto> CreateUserAsync(User user);
+        Task<UserDto?> UpdateUserAsync(int id, UpdateUserDto userDto);
+        Task<UserDto?> DeleteUserAsync(int id);
         Task<bool> UserExists(int id);
     }
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.Data;
 using api.DTOs.OrderItem;
 using api.Interfaces;
+using api.Mappers;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +20,7 @@ namespace api.Repository
             _context = context;
         }
 
-        public async Task<OrderMenuItem?> AddItemToOrder(OrderItemsDto orderItemDto)
+        public async Task<OrderItemsDto?> AddItemToOrder(OrderItemsDto orderItemDto)
         {
             var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id == orderItemDto.OrderId);
             var menuItem = await _context.MenuItems.FirstOrDefaultAsync(x => x.Id == orderItemDto.MenuItemId);
@@ -37,10 +38,10 @@ namespace api.Repository
             await _context.OrderMenuItems.AddAsync(orderItem);
             await _context.SaveChangesAsync();
 
-            return orderItem;
+            return orderItem.ToOrderItemsDto();
         }
 
-        public async Task<OrderMenuItem?> DeleteOrderItemAsync(int orderId, int itemId)
+        public async Task<OrderItemsDto?> DeleteOrderItemAsync(int orderId, int itemId)
         {
             var orderItem = await _context.OrderMenuItems.FirstOrDefaultAsync(x => x.OrderId == orderId && x.MenuItemId == itemId);
             if(orderItem == null)
@@ -49,25 +50,27 @@ namespace api.Repository
             }
             _context.OrderMenuItems.Remove(orderItem);
             await _context.SaveChangesAsync();
-            return orderItem;
+            return orderItem.ToOrderItemsDto();
         }
 
-        public async Task<List<OrderMenuItem>> GetAllAsync()
+        public async Task<List<OrderItemsDto>> GetAllAsync()
         {
-            return await _context.OrderMenuItems.ToListAsync();
+            var orderItems = await _context.OrderMenuItems.ToListAsync();
+            return orderItems.Select(oi => oi.ToOrderItemsDto()).ToList();
+
         }
 
-        public async Task<OrderMenuItem?> GetOrderItemByIdAsync(int orderId, int itemId)
+        public async Task<OrderItemsDto?> GetOrderItemByIdAsync(int orderId, int itemId)
         {
             var orderItem = await _context.OrderMenuItems.FirstOrDefaultAsync(x => x.OrderId == orderId && x.MenuItemId == itemId);
             if(orderItem == null)
             {
                 return null;
             }
-            return orderItem;
+            return orderItem.ToOrderItemsDto();
         }
 
-        public async Task<OrderMenuItem?> UpdateOrderItemAsync(OrderItemsDto orderItemDto)
+        public async Task<OrderItemsDto?> UpdateOrderItemAsync(OrderItemsDto orderItemDto)
         {
             var existingOrderItem = await _context.OrderMenuItems.FirstOrDefaultAsync(x => x.OrderId == orderItemDto.OrderId && x.MenuItemId == orderItemDto.MenuItemId);
             if(existingOrderItem == null)
@@ -76,7 +79,7 @@ namespace api.Repository
             }
             existingOrderItem.Quantity = orderItemDto.Quantity;
             await _context.SaveChangesAsync();
-            return existingOrderItem;
+            return existingOrderItem.ToOrderItemsDto();
         }
     }
 }

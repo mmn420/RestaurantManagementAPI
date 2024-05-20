@@ -22,20 +22,12 @@ namespace api.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateOrderItem([FromBody] OrderItemsDto orderItemsDto)
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             var orderItem = await _orderItemsRepo.AddItemToOrder(orderItemsDto);
             return Ok(orderItem);
         }
         [HttpDelete("{orderId}/{itemId}")]
         public async Task<IActionResult> DeleteOrderItem([FromRoute] int orderId, [FromRoute] int itemId)
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             var orderItem = await _orderItemsRepo.DeleteOrderItemAsync(orderId, itemId);
             if(orderItem == null)
             {
@@ -46,10 +38,6 @@ namespace api.Controllers
         [HttpGet("{orderId}/{itemId}")]
         public async Task<IActionResult> GetOrderItemById([FromRoute] int orderId, [FromRoute] int itemId)
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             var orderItem = await _orderItemsRepo.GetOrderItemByIdAsync(orderId, itemId);
             if(orderItem == null)
             {
@@ -66,10 +54,6 @@ namespace api.Controllers
         [HttpPatch]
         public async Task<IActionResult> UpdateOrderItem([FromBody] OrderItemsDto orderItemsDto)
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             var orderItem = await _orderItemsRepo.UpdateOrderItemAsync(orderItemsDto);
             if(orderItem == null)
             {

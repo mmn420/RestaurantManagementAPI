@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.Data;
 using api.DTOs.User;
 using api.Interfaces;
+using api.Mappers;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,14 +20,14 @@ namespace api.Repository
             _context = context;
         }
 
-        public async Task<User> CreateUserAsync(User user)
+        public async Task<UserDto> CreateUserAsync(User user)
         {
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
-            return user;
+            return user.ToUserDto();
         }
 
-        public async Task<User?> DeleteUserAsync(int id)
+        public async Task<UserDto?> DeleteUserAsync(int id)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
             if(user == null)
@@ -37,16 +38,17 @@ namespace api.Repository
             {
                 _context.Users.Remove(user);
                 await _context.SaveChangesAsync();
-                return user;
+                return user.ToUserDto();
             }
         }
 
-        public async Task<List<User>> GetAllUsersAsync()
+        public async Task<List<UserDto>> GetAllUsersAsync()
         {
-            return await _context.Users.ToListAsync();
+            var users = await _context.Users.ToListAsync();
+            return users.Select(u => u.ToUserDto()).ToList();
         }
 
-        public async Task<User?> GetUserByIdAsync(int id)
+        public async Task<UserDto?> GetUserByIdAsync(int id)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
             if(user == null)
@@ -55,11 +57,11 @@ namespace api.Repository
             }
             else
             {
-                return user;
+                return user.ToUserDto();
             }
         }
 
-        public async Task<User?> UpdateUserAsync(int id, UpdateUserDto userDto)
+        public async Task<UserDto?> UpdateUserAsync(int id, UpdateUserDto userDto)
         {
             var existingUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
             if(existingUser == null)
@@ -73,7 +75,7 @@ namespace api.Repository
                 existingUser.Email = userDto.Email == null ? existingUser.Email : userDto.Email;
                 existingUser.PhoneNumber = userDto.PhoneNumber == null ? existingUser.PhoneNumber : userDto.PhoneNumber;
                 await _context.SaveChangesAsync();
-                return existingUser;
+                return existingUser.ToUserDto();
             }
         }
 

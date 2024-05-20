@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.Controllers;
 using api.Data;
 using api.DTOs.MenuItem;
+using api.Mappers;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +19,7 @@ namespace api.Repository
         {
             _context = context;
         }
-        public async Task<MenuItem> AddMenuItemAsync(CreateMenuItemDto menuItem)
+        public async Task<MenuItemDto> AddMenuItemAsync(CreateMenuItemDto menuItem)
         {
             MenuItem newMenuItem = new MenuItem {
                 ItemName = menuItem.ItemName,
@@ -27,10 +28,10 @@ namespace api.Repository
 
             await _context.MenuItems.AddAsync(newMenuItem);
             await _context.SaveChangesAsync();
-            return newMenuItem;
+            return newMenuItem.ToMenuItemDto();
         }
 
-        public async Task<MenuItem?> DeleteMenuItemAsync(int id)
+        public async Task<MenuItemDto?> DeleteMenuItemAsync(int id)
         {
             var existingItem = await _context.MenuItems.FirstOrDefaultAsync(x => x.Id == id);
             if (existingItem == null)
@@ -41,16 +42,17 @@ namespace api.Repository
             {
                 _context.MenuItems.Remove(existingItem);
                 await _context.SaveChangesAsync();
-                return existingItem;
+                return existingItem.ToMenuItemDto();
             }
         }
 
-        public async Task<List<MenuItem>> GetAllMenuItemsAsync()
+        public async Task<List<MenuItemDto>> GetAllMenuItemsAsync()
         {
-            return await _context.MenuItems.ToListAsync();
+            var menuItems = await _context.MenuItems.ToListAsync();
+            return menuItems.Select(x => x.ToMenuItemDto()).ToList();
         }
 
-        public async Task<MenuItem?> GetMenuItemByIdAsync(int id)
+        public async Task<MenuItemDto?> GetMenuItemByIdAsync(int id)
         {
             var menuItem = await _context.MenuItems.FirstOrDefaultAsync(x => x.Id == id);
             if (menuItem == null)
@@ -59,11 +61,11 @@ namespace api.Repository
             }
             else
             {
-                return menuItem;
+                return menuItem.ToMenuItemDto();
             }
         }
 
-        public async Task<MenuItem?> UpdateMenuItemAsync(int id ,CreateMenuItemDto menuItemDto)
+        public async Task<MenuItemDto?> UpdateMenuItemAsync(int id ,CreateMenuItemDto menuItemDto)
         {
             var existingMenuItem = await _context.MenuItems.FirstOrDefaultAsync(x => x.Id == id);
             if (existingMenuItem == null)
@@ -75,7 +77,7 @@ namespace api.Repository
                 existingMenuItem.ItemName = menuItemDto.ItemName;
                 existingMenuItem.ItemPrice = menuItemDto.ItemPrice;
                 await _context.SaveChangesAsync();
-                return existingMenuItem;
+                return existingMenuItem.ToMenuItemDto();
             }
         }
     }

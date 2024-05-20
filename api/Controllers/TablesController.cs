@@ -28,10 +28,6 @@ namespace api.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetTableById([FromRoute] int id)
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             var table = await _tableRepo.GetTableByIdAsync(id);
             if(table == null)
             {
@@ -42,10 +38,6 @@ namespace api.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteTable([FromRoute] int id)
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             var table = await _tableRepo.DeleteTableAsync(id);
             if(table == null)
             {
@@ -56,10 +48,6 @@ namespace api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTable([FromBody] CreateTableDto tableDto)
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             Table newTable = new Table
             {
                 Capacity = tableDto.Capacity
@@ -70,10 +58,6 @@ namespace api.Controllers
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateTable([FromRoute] int id, [FromBody] CreateTableDto tableDto)
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             var table = await _tableRepo.UpdateTableAsync(id, tableDto);
             if(table == null)
             {

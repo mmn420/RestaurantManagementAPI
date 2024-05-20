@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
 using api.DTOs;
+using api.DTOs.Reservation;
 using api.Interfaces;
+using api.Mappers;
 using api.Models;
 using api.utils;
 using Microsoft.EntityFrameworkCore;
@@ -42,14 +44,14 @@ namespace api.Repository
             }
         }
 
-        public async Task<Reservation?> CreateReservationAsync(Reservation reservation)
+        public async Task<ReservationDto?> CreateReservationAsync(Reservation reservation)
         {
             await _context.Reservations.AddAsync(reservation);
             await _context.SaveChangesAsync();
-            return reservation;
+            return reservation.ToReservationDto();
         }
 
-        public async Task<Reservation?> DeleteReservationAsync(int id)
+        public async Task<ReservationDto?> DeleteReservationAsync(int id)
         {
             var existingReservation = await _context.Reservations.FirstOrDefaultAsync(x => x.Id == id);
             if (existingReservation == null)
@@ -60,16 +62,18 @@ namespace api.Repository
             {
                 _context.Reservations.Remove(existingReservation);
                 await _context.SaveChangesAsync();
-                return existingReservation;
+                return existingReservation.ToReservationDto();
             }
         }
 
-        public Task<List<Reservation>> GetAllReservationsAsync()
+        public async Task<List<ReservationDto>> GetAllReservationsAsync()
         {
-            return _context.Reservations.ToListAsync();
+            var reservations = await _context.Reservations.ToListAsync();
+            return reservations.Select(x => x.ToReservationDto()).ToList();
+
         }
 
-        public async Task<Reservation?> GetReservationByIdAsync(int id)
+        public async Task<ReservationDto?> GetReservationByIdAsync(int id)
         {
             var reservation = await _context.Reservations.FirstOrDefaultAsync(x => x.Id == id);
             if (reservation == null)
@@ -78,11 +82,11 @@ namespace api.Repository
             }
             else
             {
-                return reservation;
+                return reservation.ToReservationDto();
             }
         }
 
-        public async Task<Reservation?> UpdateReservationAsync(int id, CreateReservationDto reservationDto)
+        public async Task<ReservationDto?> UpdateReservationAsync(int id, CreateReservationDto reservationDto)
         {
             var dateFromString = Utilities.ParseDateInput(reservationDto.Date);
             var existingReservation = await _context.Reservations.FirstOrDefaultAsync(x => x.Id == id);
@@ -101,7 +105,7 @@ namespace api.Repository
                 existingReservation.UserId = reservationDto.UserId;
                 existingReservation.PartySize = reservationDto.PartySize;
                 await _context.SaveChangesAsync();
-                return existingReservation;
+                return existingReservation.ToReservationDto();
             }
         }
     }

@@ -73,9 +73,6 @@ namespace api.Migrations
                     b.Property<int>("MenuItemId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 

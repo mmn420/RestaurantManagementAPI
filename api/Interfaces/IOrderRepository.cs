@@ -10,10 +10,10 @@ namespace api.Interfaces
 {
     public interface IOrderRepository
     {
-        Task<Order> CreateOrder(CreateOrderDto orderDto);
-        Task<Order?> UpdateOrder(int id, UpdateOrderDto orderDto);
-        Task<Order?> DeleteOrder(int id);
-        Task<List<Order>> GetOrders();
-        Task<Order?> GetOrderById(int id);
+        Task<OrderDto> CreateOrder(CreateOrderDto orderDto);
+        Task<OrderDto?> UpdateOrder(int id, UpdateOrderDto orderDto);
+        Task<OrderDto?> DeleteOrder(int id);
+        Task<List<OrderDto>> GetOrders();
+        Task<OrderDto?> GetOrderById(int id);
     }
 }

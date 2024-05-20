@@ -9,10 +9,10 @@ namespace api.Controllers
 {
     public interface IMenuItemRepository
     {
-        Task<List<MenuItem>> GetAllMenuItemsAsync();
-        Task<MenuItem?> GetMenuItemByIdAsync(int id);
-        Task<MenuItem> AddMenuItemAsync(CreateMenuItemDto menuItem);
-        Task<MenuItem?> UpdateMenuItemAsync(int id ,CreateMenuItemDto menuItemDto);
-        Task<MenuItem?> DeleteMenuItemAsync(int id);
+        Task<List<MenuItemDto>> GetAllMenuItemsAsync();
+        Task<MenuItemDto?> GetMenuItemByIdAsync(int id);
+        Task<MenuItemDto> AddMenuItemAsync(CreateMenuItemDto menuItem);
+        Task<MenuItemDto?> UpdateMenuItemAsync(int id ,CreateMenuItemDto menuItemDto);
+        Task<MenuItemDto?> DeleteMenuItemAsync(int id);
     }
 }
