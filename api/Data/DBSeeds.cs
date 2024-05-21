@@ -22,13 +22,13 @@ namespace api.Data
                     {
                         new User()
                         {
-                            Name = "Dummy Name",
+                            UserName = "Dummy Name",
                             Email = "abc@aol.com",
                             PhoneNumber = "+201123195384"
                         },
                         new User
                         {
-                            Name = "Mo'men Maged",
+                            UserName = "Mo'men Maged",
                             Email = "momen@gmail.com",
                             PhoneNumber = "+201123195384"
                         }

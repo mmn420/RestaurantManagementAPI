@@ -14,7 +14,7 @@ namespace api.Mappers
             return new UserDto {
                 Id = userModel.Id,
                 Email = userModel.Email,
-                Name = userModel.Name,
+                Name = userModel.UserName,
                 PhoneNumber = userModel.PhoneNumber
             };
         }

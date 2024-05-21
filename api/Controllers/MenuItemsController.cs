@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.DTOs.MenuItem;
 using api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -35,6 +36,7 @@ namespace api.Controllers
             return Ok(menuItem);
         }
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteMenuItem([FromRoute] int id)
         {
             var menuItem = await _menuItemRepo.DeleteMenuItemAsync(id);

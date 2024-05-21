@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace api.Models
+namespace api.DTOs.Reservation
 {
-    public class Reservation
+    public class ReservationDto
     {
         public int Id { get; set; }
         public int TableId { get; set; }
         public DateOnly Date { get; set; }
-        public string UserId { get; set; } = string.Empty;
+        public string UserId { get; set; }
         public int PartySize { get; set; }
     }
 }

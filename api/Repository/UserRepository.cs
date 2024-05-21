@@ -27,7 +27,7 @@ namespace api.Repository
             return user.ToUserDto();
         }
 
-        public async Task<UserDto?> DeleteUserAsync(int id)
+        public async Task<UserDto?> DeleteUserAsync(string id)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
             if(user == null)
@@ -48,7 +48,7 @@ namespace api.Repository
             return users.Select(u => u.ToUserDto()).ToList();
         }
 
-        public async Task<UserDto?> GetUserByIdAsync(int id)
+        public async Task<UserDto?> GetUserByIdAsync(string id)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
             if(user == null)
@@ -61,7 +61,7 @@ namespace api.Repository
             }
         }
 
-        public async Task<UserDto?> UpdateUserAsync(int id, UpdateUserDto userDto)
+        public async Task<UserDto?> UpdateUserAsync(string id, UpdateUserDto userDto)
         {
             var existingUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
             if(existingUser == null)
@@ -71,7 +71,7 @@ namespace api.Repository
             else
             {
                 System.Console.WriteLine(existingUser);
-                existingUser.Name = userDto.Name == null ? existingUser.Name : userDto.Name;
+                existingUser.UserName = userDto.Name == null ? existingUser.UserName : userDto.Name;
                 existingUser.Email = userDto.Email == null ? existingUser.Email : userDto.Email;
                 existingUser.PhoneNumber = userDto.PhoneNumber == null ? existingUser.PhoneNumber : userDto.PhoneNumber;
                 await _context.SaveChangesAsync();
@@ -79,7 +79,7 @@ namespace api.Repository
             }
         }
 
-        public async Task<bool> UserExists(int id)
+        public async Task<bool> UserExists(string id)
         {
             return await _context.Users.AnyAsync(x => x.Id == id);
         }
