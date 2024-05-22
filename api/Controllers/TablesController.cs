@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.DTOs.Table;
 using api.Interfaces;
 using api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -36,6 +37,7 @@ namespace api.Controllers
             return Ok(table);
         }
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteTable([FromRoute] int id)
         {
             var table = await _tableRepo.DeleteTableAsync(id);
@@ -46,6 +48,7 @@ namespace api.Controllers
             return Ok(table);
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateTable([FromBody] CreateTableDto tableDto)
         {
             Table newTable = new Table
@@ -56,6 +59,7 @@ namespace api.Controllers
             return Ok(table);
         }
         [HttpPatch("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateTable([FromRoute] int id, [FromBody] CreateTableDto tableDto)
         {
             var table = await _tableRepo.UpdateTableAsync(id, tableDto);

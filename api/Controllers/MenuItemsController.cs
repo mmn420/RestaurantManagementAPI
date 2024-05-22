@@ -47,12 +47,14 @@ namespace api.Controllers
             return Ok(menuItem);
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateMenuItem([FromBody] CreateMenuItemDto menuItemDto)
         {
             var menuItem = await _menuItemRepo.AddMenuItemAsync(menuItemDto);
             return Ok(menuItem);
         }
         [HttpPatch("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateMenuItem([FromRoute] int id, [FromBody] CreateMenuItemDto menuItemDto)
         {
             var menuItem = await _menuItemRepo.UpdateMenuItemAsync(id, menuItemDto);

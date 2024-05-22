@@ -6,6 +6,7 @@ using api.DTOs;
 using api.Interfaces;
 using api.Models;
 using api.utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -22,6 +23,7 @@ namespace api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllReservations()
         {
             var reservations = await _reservationRepo.GetAllReservationsAsync();
@@ -29,6 +31,7 @@ namespace api.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetReservationById(int id)
         {
             var reservation = await _reservationRepo.GetReservationByIdAsync(id);
@@ -40,6 +43,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateReservation([FromBody] CreateReservationDto reservationModel)
         {
             var dateFromString = Utilities.ParseDateInput(reservationModel.Date);
@@ -60,6 +64,7 @@ namespace api.Controllers
         }
 
         [HttpPatch("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateReservation(int id, [FromBody] CreateReservationDto reservationDto)
         {
             var reservation = await _reservationRepo.UpdateReservationAsync(id, reservationDto);
@@ -70,6 +75,7 @@ namespace api.Controllers
             return Ok(reservation);
         }
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteReservation(int id)
         {
             var reservation = await _reservationRepo.DeleteReservationAsync(id);

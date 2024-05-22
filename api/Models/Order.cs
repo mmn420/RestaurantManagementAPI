@@ -10,7 +10,7 @@ namespace api.Models
         public int Id { get; set; }
         public string OrderStatus { get; set; } = string.Empty;
         public int TableId { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public ICollection<OrderMenuItem> OrderMenuItems { get; set; }
     }
 }

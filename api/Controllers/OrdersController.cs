@@ -6,6 +6,7 @@ using api.DTOs.Order;
 using api.DTOs.OrderItem;
 using api.Interfaces;
 using api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -27,6 +28,7 @@ namespace api.Controllers
             return Ok(await _orderRepo.GetOrders());
         }
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<Order>> GetOrderById( [FromRoute] int id)
         {
             
@@ -38,6 +40,7 @@ namespace api.Controllers
             return Ok(order);
         }
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult<Order>> DeleteOrder([FromRoute] int id)
         {
             
@@ -49,6 +52,7 @@ namespace api.Controllers
             return Ok(order);
         }
         [HttpPatch("{id}")]
+        [Authorize]
         public async Task<ActionResult<Order>> UpdateOrder([FromRoute] int id, [FromBody ]UpdateOrderDto updateOrderDto)
         {
             
@@ -60,6 +64,7 @@ namespace api.Controllers
             return Ok(order);
         }
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<Order>> CreateOrder([FromBody] CreateOrderDto createOrderDto)
         {
             

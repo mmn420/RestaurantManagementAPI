@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Models;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace api.Data
@@ -14,6 +15,7 @@ namespace api.Data
             using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetService<ApplicationDBContext>();
+                var usermanager = serviceScope.ServiceProvider.GetService<UserManager<User>>();
                 context.Database.EnsureCreated();
                 //Ciema
                 if (!context.Users.Any())
